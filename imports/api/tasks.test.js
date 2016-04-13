@@ -85,8 +85,6 @@ if (Meteor.isServer) {
           expect( function() {
             setPrivateTask.apply(invocation, [anotherTask._id, false]);
           }).to.throw(Meteor.Error('not-authorized'));
-
-          assert.equal(Tasks.findOne(task._id).private, true);
         });
       });
     });

@@ -1,9 +1,10 @@
 import 'angular-mocks';
 import { Meteor } from 'meteor/meteor';
-
 import todosList from '../todosList';
+import { Tasks } from '/imports/api/tasks.js';
 import { assert } from 'meteor/practicalmeteor:chai';
 import { sinon } from 'meteor/practicalmeteor:sinon';
+import { stubs } from 'meteor/practicalmeteor:sinon';
 
 describe('todosList', function() {
   var element;
@@ -28,25 +29,82 @@ describe('todosList', function() {
       assert.include(element[0].querySelector('p').innerHTML, '0');
     });
   });
+
   describe('controller', function() {
+    var controller;
+    beforeEach(() => {
+      sinon.stub(Meteor, 'call');
+      controller = element.controller('todosList');
+    });
+
+    afterEach(() => {
+      Meteor.call.restore();
+    });
+
     describe('addTask', function() {
-      var controller;
       var newTask = 'Be more fabolous';
 
       beforeEach(() => {
-        sinon.stub(Meteor, 'call');
-        controller = element.controller('todosList');
-        controller.newTask = 'Be fabolous';
         controller.addTask(newTask);
-      });
-
-      afterEach(() => {
-        Meteor.call.restore();
       });
 
       it('should call tasks.insert method', function() {
         sinon.assert.calledOnce(Meteor.call);
         sinon.assert.calledWith(Meteor.call, 'tasks.insert', newTask);
+      });
+    });
+
+    describe('removeTask', function() {
+      var task = { _id: "abc" };
+
+      beforeEach(() => {
+        controller.removeTask(task);
+      });
+
+      it('should call tasks.remove method', function() {
+        sinon.assert.calledOnce(Meteor.call);
+        sinon.assert.calledWith(Meteor.call, 'tasks.remove', task._id);
+      });
+    });
+
+    describe('setChecked', function() {
+      var task = { _id: "abc", checked: true };
+
+      beforeEach(() => {
+        controller.setChecked(task);
+      });
+
+      it('should call tasks.setChecked method', function() {
+        sinon.assert.calledOnce(Meteor.call);
+        sinon.assert.calledWith(Meteor.call, 'tasks.setChecked', task._id, false);
+      });
+    });
+
+    describe('setPrivate', function() {
+      var task = { _id: "abc", private: false };
+
+      beforeEach(() => {
+        controller.setPrivate(task);
+      });
+
+      it('should call tasks.setPrivate method', function() {
+        sinon.assert.calledOnce(Meteor.call);
+        sinon.assert.calledWith(Meteor.call, 'tasks.setPrivate', task._id, true);
+      });
+    });
+
+    describe('currentUser', function() {
+      beforeEach(() => {
+        stubs.create('user', Meteor, 'user');
+        stubs.user.returns("abc");
+      });
+
+      afterEach(() => {
+        stubs.restoreAll();
+      });
+
+      it('return Meteor.user()', function() {
+        assert.equal(controller.currentUser(), "abc");
       });
     });
   });
