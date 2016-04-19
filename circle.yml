@@ -1,0 +1,11 @@
+machine:
+  node:
+    version: 0.10.43
+dependencies:
+  override:
+    - curl https://install.meteor.com | /bin/sh
+    - npm install -g spacejam@1.6.0-rc1
+    - meteor npm install
+test:
+  override:
+    - spacejam test --driver-package practicalmeteor:mocha-console-runner
