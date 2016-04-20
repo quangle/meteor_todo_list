@@ -11,5 +11,9 @@
   },
   "devDependencies": {
     "angular-mocks": "^1.5.3"
+  },
+  "scripts": {
+    "chimp-watch": "MONGO_URL=mongodb://localhost:27017/meteor meteor --port 3100 & chimp --ddp=http://localhost:3100 --watch --path=features",
+    "chimp-test": "MONGO_URL=mongodb://localhost:27017/meteor meteor --port 3100 & chimp --ddp=http://localhost:3100 --path=features"
   }
 }

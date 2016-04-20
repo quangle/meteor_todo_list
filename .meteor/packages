@@ -25,3 +25,4 @@ dburles:factory
 anti:fake
 practicalmeteor:sinon
 practicalmeteor:mocha-console-runner@0.2.0
+xolvio:backdoor

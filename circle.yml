@@ -5,7 +5,9 @@ dependencies:
   override:
     - curl https://install.meteor.com | /bin/sh
     - npm install -g spacejam@1.6.0-rc1
+    - meteor npm install --global chimp
     - meteor npm install
 test:
   override:
     - spacejam test --driver-package practicalmeteor:mocha-console-runner
+    - meteor npm run chimp-test
